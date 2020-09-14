@@ -16,7 +16,7 @@ jobs:
       - checkout
       - secrethub/install
       - first_step:
-          comand: "A FIRST TEST JOB"
+          command: "A FIRST TEST JOB"
           run: |
                echo "A FIRST TEST JOB"
   yet_another_test_job:
@@ -32,7 +32,7 @@ jobs:
       - checkout
       - secrethub/install
       - some_step:
-          comand: "YET ANOTHER TEST WORKFLOW"
+          command: "YET ANOTHER TEST WORKFLOW"
           run: |
                echo "YET ANOTHER TEST WORKFLOW"
 
