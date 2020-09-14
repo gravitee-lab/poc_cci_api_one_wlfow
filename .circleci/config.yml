@@ -15,9 +15,9 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - first_step:
-          command: "A FIRST TEST JOB"
-          run: |
+      - run:
+          name: "A FIRST TEST JOB"
+          command: |
                echo "A FIRST TEST JOB"
   yet_another_test_job:
     machine:
@@ -31,9 +31,9 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - some_step:
-          command: "YET ANOTHER TEST WORKFLOW"
-          run: |
+      - run:
+          name: "YET ANOTHER TEST WORKFLOW"
+          command: |
                echo "YET ANOTHER TEST WORKFLOW"
 
 workflows:
