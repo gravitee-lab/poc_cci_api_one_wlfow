@@ -18,3 +18,8 @@ So basically :
 * You cannot run a workflow of a pipeline "for the first time".
 
 So basically solution is to filter the desired workflow using bracnhes filter.
+
+
+# Added feature
+
+on a different branch, using the git flow
