@@ -15,9 +15,8 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - run:
-          name: "A First TEST JOB"
-          command: echo "YET ANOTHER TEST WORKFLOW"
+      - run: |
+             echo "A FIRST TEST JOB"
   yet_another_test_job:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
@@ -30,9 +29,8 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - run:
-          name: "YET ANOTHER TEST JOB"
-          command: echo "YET ANOTHER TEST WORKFLOW"
+      - run: |
+             echo "YET ANOTHER TEST WORKFLOW"
 
 workflows:
   version: 2.1
