@@ -31,7 +31,7 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - :
+      - some_step:
           comand: "YET ANOTHER TEST WORKFLOW"
           run: |
                echo "YET ANOTHER TEST WORKFLOW"
