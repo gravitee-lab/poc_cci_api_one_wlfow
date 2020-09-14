@@ -15,8 +15,10 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - run: |
-             echo "A FIRST TEST JOB"
+      - first_step:
+          comand: "A FIRST TEST JOB"
+          run: |
+               echo "A FIRST TEST JOB"
   yet_another_test_job:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
@@ -29,8 +31,10 @@ jobs:
     steps:
       - checkout
       - secrethub/install
-      - run: |
-             echo "YET ANOTHER TEST WORKFLOW"
+      - :
+          comand: "YET ANOTHER TEST WORKFLOW"
+          run: |
+               echo "YET ANOTHER TEST WORKFLOW"
 
 workflows:
   version: 2.1
@@ -38,23 +42,10 @@ workflows:
     jobs:
       - yet_another_test_job:
           context: gravitee-lab
-          filters:
-            tags:
-              # only: /^v.*/
-              only: /^*/
   a_first_workflow:
     jobs:
       - yet_another_test_job:
           context: gravitee-lab
-          filters:
-            tags:
-              # only: /^v.*/
-              only: /^*/
       - a_first_test_job:
           context: gravitee-lab
           requires:
-            yet_another_test_job
-          filters:
-            tags:
-              # only: /^v.*/
-              only: /^*/
