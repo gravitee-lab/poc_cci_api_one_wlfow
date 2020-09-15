@@ -59,12 +59,12 @@ workflows:
                 - 3.0.x
                 - 3.1.x
                 - /^*.x/
-              ignore:
-                - /^fix*/
-                - /^issues*/
-                - /^*support/
-                - /^*snyk*/
-                - /^*dependabot*/
+              # ignore:
+                # - /^fix*/
+                # - /^issues*/
+                # - /^*support/
+                # - /^*snyk*/
+                # - /^*dependabot*/
   dev_pr_review:
     jobs:
       - yet_another_test_job:
