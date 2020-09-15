@@ -87,8 +87,8 @@ workflows:
                 - /^issues*/
               # will not run on pull requests
               #
-              ignore:
-                - /^fix*/
-                - /^*support/
-                - /^*snyk*/
-                - /^*dependabot*/
+              # ignore:
+                # - /^fix*/
+                # - /^*support/
+                # - /^*snyk*/
+                # - /^*dependabot*/
