@@ -51,6 +51,14 @@ workflows:
             branches:
               # will not run on pull requests from
               # dev or support team
+              only:
+                - master
+                - 1.20.x
+                - 1.25.x
+                - 1.30.x
+                - 3.0.x
+                - 3.1.x
+                - /^*.x/
               ignore:
                 - /^fix*/
                 - /^issues*/
