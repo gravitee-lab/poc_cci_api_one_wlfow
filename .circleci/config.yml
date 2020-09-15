@@ -65,7 +65,9 @@ workflows:
             # tags:
               # only:
                 # - /^*.*.*/
-              # will run only when on pull requests with source branch names starting with the 'issues' string, or elease branches
+              # will run only when on pull requests with source branch:
+              # => with names starting with the 'issues' string,
+              # => or release branches
             branches:
               only:
                 - 1.20.x
@@ -75,10 +77,10 @@ workflows:
                 - 3.1.x
                 - /^*.x/
                 - /^issues*/
-              # will not run on pull requests from
+              # will not run on pull requests
               #
-              # ignore:
-                # - /^fix*/
-                # - /^*support/
-                # - /^*snyk*/
-                # - /^*dependabot*/
+              ignore:
+                - /^fix*/
+                - /^*support/
+                - /^*snyk*/
+                - /^*dependabot*/
