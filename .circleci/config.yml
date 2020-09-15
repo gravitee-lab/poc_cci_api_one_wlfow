@@ -50,7 +50,7 @@ workflows:
                 - /^*.*.*/
             branches:
               # will not run on pull requests from
-              #
+              # dev or support team
               ignore:
                 - /^fix*/
                 - /^issues*/
