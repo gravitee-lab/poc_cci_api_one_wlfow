@@ -43,7 +43,7 @@ workflows:
       - yet_another_test_job:
           context: gravitee-lab
           filters:
-            # will run only when on master branch, with a release tag 
+            # will run only when on master branch, with a release tag
             tags:
               only: /^rc-*.*.*/
             branches:
@@ -63,7 +63,8 @@ workflows:
           context: gravitee-lab
           filters:
             tags:
-              only: /^*.*.*/
+              only:
+                - /^*.*.*/
               # will run only when on pull requests wit source branch names starting with the 'issues' string
             branches:
               only:
