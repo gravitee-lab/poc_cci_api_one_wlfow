@@ -47,6 +47,7 @@ workflows:
             tags:
               only:
                 - /^rc-*.*.*/
+                - /^*.*.*/
             branches:
               # will not run on pull requests from
               #
