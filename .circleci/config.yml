@@ -88,8 +88,6 @@ workflows:
           context: gravitee-lab
           requires:
             branches:
-              only:
-                - unexisting
               # will not run on pull requests from
               #
               ignore:
