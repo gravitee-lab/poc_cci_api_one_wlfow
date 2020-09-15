@@ -42,6 +42,25 @@ workflows:
     jobs:
       - yet_another_test_job:
           context: gravitee-lab
+          filters:
+            tags:
+              # only: /^v.*/
+              # will run only when on release branches
+              only:
+                - 1.20.x
+                - 1.25.x
+                - 1.30.x
+                - 3.0.x
+                - 3.1.x
+                - /^*.x/
+              # will not run on pull requests from
+              #
+              ignore:
+                - /^fix*/
+                - /^issues*/
+                - /^*support/
+                - /^*snyk*/
+                - /^*dependabot*/
   a_first_workflow:
     jobs:
       - yet_another_test_job:
