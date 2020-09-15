@@ -30,3 +30,8 @@ on a different branch, using the git flow
 Adding a new commit on branch `3.0.x` after releasing `3.0.2` on `master` branch
 
 Adding a new commit on branch [3.0.x] after releasing [3.0.2] on [master] branch
+
+
+# Finally
+
+Added to make a new commit on `3.0.x` branch, and send a pull request, to trigger pipeline, and execute only `dev-pr-workflow` Circle CI Pipeline Workflow defined in [`./.circleci/config.yml`]
