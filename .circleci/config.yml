@@ -45,7 +45,8 @@ workflows:
           filters:
             # will run only when on master branch, with a release tag
             tags:
-              only: /^rc-*.*.*/
+              only:
+                - /^rc-*.*.*/
             branches:
               # will not run on pull requests from
               #
