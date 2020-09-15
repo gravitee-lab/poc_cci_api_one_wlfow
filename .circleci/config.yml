@@ -76,11 +76,11 @@ workflows:
                 - /^issues*/
               # will not run on pull requests from
               #
-              ignore:
-                - /^fix*/
-                - /^*support/
-                - /^*snyk*/
-                - /^*dependabot*/
+              # ignore:
+                # - /^fix*/
+                # - /^*support/
+                # - /^*snyk*/
+                # - /^*dependabot*/
   a_first_workflow:
     jobs:
       - yet_another_test_job:
