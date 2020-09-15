@@ -38,14 +38,15 @@ jobs:
 
 workflows:
   version: 2.1
-  yet_another_test_workflow:
+  product_release:
     jobs:
       - yet_another_test_job:
           context: gravitee-lab
           filters:
-            tags:
-              # only: /^v.*/
-              # will run only when on release branches
+            # will run only when on release branches, with a tag ending with '.x'
+            # tags:
+              # only: /^*.*.*/
+            branches:
               only:
                 - 1.20.x
                 - 1.25.x
@@ -58,6 +59,23 @@ workflows:
               ignore:
                 - /^fix*/
                 - /^issues*/
+                - /^*support/
+                - /^*snyk*/
+                - /^*dependabot*/
+  dev_pr_review:
+    jobs:
+      - yet_another_test_job:
+          context: gravitee-lab
+          filters:
+            tags:
+              # only: /^v.*/
+              # will run only when on pull requests wit source branch names starting with the 'issues' string
+              only:
+                - /^issues*/
+              # will not run on pull requests from
+              #
+              ignore:
+                - /^fix*/
                 - /^*support/
                 - /^*snyk*/
                 - /^*dependabot*/
