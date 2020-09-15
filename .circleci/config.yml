@@ -43,17 +43,12 @@ workflows:
       - yet_another_test_job:
           context: gravitee-lab
           filters:
-            # will run only when on release branches, with a tag ending with '.x'
-            # tags:
-              # only: /^*.*.*/
+            # will run only when on master branch, with a release tag 
+            tags:
+              only: /^rc-*.*.*/
             branches:
               only:
-                - 1.20.x
-                - 1.25.x
-                - 1.30.x
-                - 3.0.x
-                - 3.1.x
-                - /^*.x/
+                - master
               # will not run on pull requests from
               #
               ignore:
@@ -68,9 +63,16 @@ workflows:
           context: gravitee-lab
           filters:
             tags:
-              # only: /^v.*/
+              only: /^*.*.*/
               # will run only when on pull requests wit source branch names starting with the 'issues' string
+            branches:
               only:
+                - 1.20.x
+                - 1.25.x
+                - 1.30.x
+                - 3.0.x
+                - 3.1.x
+                - /^*.x/
                 - /^issues*/
               # will not run on pull requests from
               #
@@ -86,3 +88,20 @@ workflows:
       - a_first_test_job:
           context: gravitee-lab
           requires:
+            branches:
+              only:
+                - unexisting
+              # will not run on pull requests from
+              #
+              ignore:
+                - /^fix*/
+                - /^*support/
+                - /^*snyk*/
+                - /^*dependabot*/
+                - 1.20.x
+                - 1.25.x
+                - 1.30.x
+                - 3.0.x
+                - 3.1.x
+                - /^*.x/
+                - /^issues*/
