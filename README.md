@@ -23,3 +23,10 @@ So basically solution is to filter the desired workflow using bracnhes filter.
 # Added feature
 
 on a different branch, using the git flow
+
+
+# Now
+
+Adding a new commit on branch `3.0.x` after releasing `3.0.2` on `master` branch
+
+Adding a new commit on branch [3.0.x] after releasing [3.0.2] on [master] branch
