@@ -60,10 +60,10 @@ workflows:
       - yet_another_test_job:
           context: gravitee-lab
           filters:
-            tags:
-              only:
-                - /^*.*.*/
-              # will run only when on pull requests wit source branch names starting with the 'issues' string
+            # tags:
+              # only:
+                # - /^*.*.*/
+              # will run only when on pull requests with source branch names starting with the 'issues' string, or elease branches
             branches:
               only:
                 - 1.20.x
