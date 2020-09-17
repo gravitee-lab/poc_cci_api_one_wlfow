@@ -7,6 +7,12 @@ git checkout ${WORK_BRANCH}
 
 
 
+git checkout -D support-one-testcase1
+git checkout -D issue-one-testcase1
+git checkout -D issue-two-testcase1
+git checkout -D support-two-testcase1
+git checkout -D issue-three-testcase1
+git checkout -D issue-four-testcase1
 
 
 git checkout 3.0.x
