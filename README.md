@@ -2,7 +2,7 @@
 
 A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Circle CI pipeline definition .circleci/config.yml including at least two workflows, one can run only one Pipeline's Workflow, using the Circle CI API v2.
 
-### Tested :
+### Tested : A pipeline, configured to run _"Only on Pull Request"_
 
 * Verified : Build Pull Request Only does trigger pipeline, from a git push, if a pull request is still open (so you cannot git push any commit after a pull request that is stil opened) :
 * now let's trigger a pipeline :

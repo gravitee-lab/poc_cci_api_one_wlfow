@@ -132,7 +132,7 @@ workflows:
           context: gravitee-lab
   product_release:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ product_release, << pipeline.parameters.gio_action >> ]
     jobs:
       - product_release_job1:
           context: gravitee-lab
@@ -158,25 +158,25 @@ workflows:
 
   LTS_release:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ lts_support_release, << pipeline.parameters.gio_action >> ]
     jobs:
       - LTS_release_job1:
           context: gravitee-lab
   STS_release:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ sts_support_release, << pipeline.parameters.gio_action >> ]
     jobs:
       - STS_release_job1:
           context: gravitee-lab
   support_pr_review:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ support_pr_review, << pipeline.parameters.gio_action >> ]
     jobs:
       - support_pr_job1:
           context: gravitee-lab
   dev_pr_review:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ dev_pr_review, << pipeline.parameters.gio_action >> ]
     jobs:
       - dev_pr_job1:
           context: gravitee-lab
