@@ -65,29 +65,19 @@ The initial state :
 
 
 The steps of this Use Case :
-* Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
-* git push a new commit
+
+* **step 1 (trigger CircleCI `pull_requests_bot_exec` workflow)** Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
+* **step 2 (ccc)** git push a new commit on `support-one-testcase1`, `git` branch
+* **step 3 (ccc)** git push a new commit on `issue-one-testcase1`, `git` branch
+* **step 4 (ccc)** git push a new commit on `issue-two-testcase1`, `git` branch
 * Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
 
 * Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
 * Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
 
+Base de tests :
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-* Verified : Build Pull Request Only does trigger pipeline, from a git push, if a pull request is still open (so you cannot git push any commit after a pull request that is stil opened) :
-* now let's trigger a pipeline :
+* now let's trigger a single workflow of the pipeline, which is not the pull request bot (that's what the pull request bot will do) :
 
 ```bash
 export CCI_API_TOKEN='xxxxxxxxxxxxxxxxxxxxx'
@@ -103,6 +93,12 @@ export GIT_BRANCH="master"
 export GIT_BRANCH="develop"
 export GIT_BRANCH="3.0.x"
 export GIT_BRANCH="3.8.x"
+export GIT_BRANCH="support-one-testcase1"
+export GIT_BRANCH="issue-one-testcase1"
+export GIT_BRANCH="issue-two-testcase1"
+export GIT_BRANCH="support-two-testcase1"
+export GIT_BRANCH="issue-three-testcase1"
+export GIT_BRANCH="issue-four-testcase1"
 export GIT_BRANCH="issue-test-dev_pr_review-cci-workflow"
 
 export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" }, \"branch\": \"${GIT_BRANCH}\" }"
