@@ -66,47 +66,43 @@ The initial state :
 
 The steps of this Use Case :
 
-* **step 1 (trigger CircleCI `pull_requests_bot_exec` workflow)** Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
-* **step 2 (ccc)** git push a new commit on `support-one-testcase1`, `git` branch
-* **step 3 (ccc)** git push a new commit on `issue-one-testcase1`, `git` branch
-* **step 4 (ccc)** git push a new commit on `issue-two-testcase1`, `git` branch
-* Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
-
-* Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
-* Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
-
-Base de tests :
-
-* now let's trigger a single workflow of the pipeline, which is not the pull request bot (that's what the pull request bot will do) :
+  * **step 1 (trigger CircleCI `pull_requests_bot_exec` workflow)** Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
+    * **step 2 (trigger CircleCI `pull_requests_bot_exec` workflow)** git push a new commit on `support-one-testcase1`, `git` branch
+    * **step 3 (trigger CircleCI `pull_requests_bot_exec` workflow)** git push a new commit on `issue-one-testcase1`, `git` branch
+    * **step 4 (trigger CircleCI `pull_requests_bot_exec` workflow)** git push a new commit on `issue-two-testcase1`, `git` branch
+  * **step 5 (trigger CircleCI `pull_requests_bot_exec` workflow)** Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
+    * **step 6 (trigger CircleCI `pull_requests_bot_exec` workflow)** git push a new commit on `support-one-testcase1`, `git` branch
+    * **step 7 (trigger CircleCI `pull_requests_bot_exec` workflow)** git push a new commit on `issue-one-testcase1`, `git` branch
+    * **step 8 (trigger CircleCI `pull_requests_bot_exec` workflow)** git push a new commit on `issue-two-testcase1`, `git` branch
+  * **step 9 (trigger CircleCI `product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review` workflows with Circle CI API v2)**
+    * now let's trigger a single workflow of the pipeline, which is not the pull request bot (that's what the pull request bot will do) :
 
 ```bash
 export CCI_API_TOKEN='xxxxxxxxxxxxxxxxxxxxx'
-export GIO_CICD_ACTION="empty_workflow"
+
+# choose the workflow
 export GIO_CICD_ACTION="product_release"
 export GIO_CICD_ACTION="lts_support_release"
 export GIO_CICD_ACTION="sts_support_release"
 export GIO_CICD_ACTION="dev_pr_review"
 export GIO_CICD_ACTION="support_pr_review"
 
-
+# choose the branch
 export GIT_BRANCH="master"
 export GIT_BRANCH="develop"
-export GIT_BRANCH="3.0.x"
-export GIT_BRANCH="3.8.x"
 export GIT_BRANCH="support-one-testcase1"
 export GIT_BRANCH="issue-one-testcase1"
 export GIT_BRANCH="issue-two-testcase1"
 export GIT_BRANCH="support-two-testcase1"
 export GIT_BRANCH="issue-three-testcase1"
 export GIT_BRANCH="issue-four-testcase1"
+export GIT_BRANCH="3.0.x"
+export GIT_BRANCH="3.8.x"
 export GIT_BRANCH="issue-test-dev_pr_review-cci-workflow"
 
-export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" }, \"branch\": \"${GIT_BRANCH}\" }"
-export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" }, \"branch\": \"${GIT_BRANCH}\" }"
-export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"78.25.46\" }, \"branch\": \"${GIT_BRANCH}\" }"
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"stable-latest\" }, \"branch\": \"${GIT_BRANCH}\" }"
 
 curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H 'Content-Type: application/json' -H "Circle-Token: ${CCI_API_TOKEN}" | jq .
-
 
 ```
 
