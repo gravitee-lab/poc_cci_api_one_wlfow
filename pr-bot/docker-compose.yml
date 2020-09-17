@@ -1,0 +1,7 @@
+version '3'
+
+services:
+  pr_bot:
+    image: quay.io/gravitee-lab/pull-request-bot:${DOCKER_TAG}
+    volumes:
+      - $PWD:/bot-arena/git
