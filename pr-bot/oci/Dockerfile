@@ -3,9 +3,9 @@ FROM alpine:latest
 
 RUN apk update && apk add bash git
 
-RUN mkdir -p /bot-arena
+RUN mkdir -p /bot-arena/cci/pipeline
 
-VOLUME /bot-arena/git
+VOLUME /bot-arena/cci/pipeline
 WORKDIR /bot-arena
 
 CMD [""]

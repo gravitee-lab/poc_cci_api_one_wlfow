@@ -12,5 +12,7 @@ export DOCKER_TAG=${DOCKER_TAG:-'0.0.1'}
 docker build -t pull-request-bot:${DOCKER_TAG} oci/
 
 docker tag pull-request-bot:${DOCKER_TAG} quay.io/gravitee-lab/pull-request-bot:${DOCKER_TAG}
+docker tag pull-request-bot:${DOCKER_TAG} quay.io/gravitee-lab/pull-request-bot:stable-latest
 
 docker push quay.io/gravitee-lab/pull-request-bot:${DOCKER_TAG}
+docker push quay.io/gravitee-lab/pull-request-bot:stable-latest
