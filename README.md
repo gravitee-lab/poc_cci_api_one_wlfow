@@ -9,7 +9,7 @@ A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Ci
 ![Only build pull requests](./docs/images/ONLY_BUILD_PULL_REQUESTS.png)
 
 * The pull request bot will be triggered :
-  * by any new pull request, on the source bracnh of the pull request
+  * by any new pull request, on the source branch of the pull request
   * by any git pushed commit, on the source branch of any already existing pull request
 * The pull request bot will not be triggered if the pipeline execution is triggered using the Circle Ci API v2, and providing the pipeline parameter `gio_action` has any of the enumeration values but the `pull_requests_bot` value.
 * So the pull requests bot will then inspect the native Circle CI Env. Variables relative to pull requests, and :
@@ -49,7 +49,36 @@ Note that if the suppor team changes its git workflow, to ccreate support branch
 
 
 
-### Test it !
+## Test it !
+
+### "Only build pull requests" : CICD User Story
+
+The initial state :
+
+* The `3.0.x`, and `3.8.x` `git` branches exists, at least one commit has been git pushed to these git banches, and these have been created from the master branch
+* The `./test-cases/1/init.sh` script, has been executed, which created the following `git` branches, and at least one commit has been git pushed to these git banches :
+  * The `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches have been created from the `3.0.1` git branch
+  * The `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches have been created from the `3.8.1` git branch
+* The Circle CI project associated to this `git` repo has been configured to _"Only build pull requests"_ :
+
+![Only build pull requests](./docs/images/ONLY_BUILD_PULL_REQUESTS.png)
+
+
+The steps of this Use Case :
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -96,7 +125,7 @@ So basically :
 * You can re-run a workflow of a pipeline Definition
 * You cannot run a workflow of a pipeline "for the first time".
 
-So basically solution is to filter the desired workflow using bracnhes filter.
+So basically solution is to filter the desired workflow using branches filter.
 
 
 # Added feature
