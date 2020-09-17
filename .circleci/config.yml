@@ -4,11 +4,11 @@ version: 2.1
 parameters:
   gio_action:
     type: enum
-    enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
+    enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review, empty_workflow]
     # the [default:] clause is required : without it, a Circle CI error will occur
     # default: none
     # the [default:] clause must have a valid value : without a valid value, a Circle CI error will occur
-    default: dev_pr_review
+    default: empty_workflow
   pull_req_bot_image_tag:
     type: string
     default: '3.0.76'
@@ -16,6 +16,19 @@ parameters:
 orbs:
   secrethub: secrethub/cli@1.0.0
 jobs:
+  empty_job:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_DOCKER_TAG: 5.27.1
+    steps:
+      - checkout
+      - run:
+          name: "This job is the default job invoked from pipeline parameters"
+          command: |
+                   echo "This job does nothing"
   pull_requests_bot_exec:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
@@ -184,3 +197,9 @@ workflows:
       - dev_pr_job1:
           context: gravitee-lab
           # filters:
+  empty_workflow:
+    when:
+      equal: [ empty_workflow, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - empty_job:
+          context: gravitee-lab
