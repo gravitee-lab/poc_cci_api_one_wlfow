@@ -25,7 +25,7 @@ jobs:
           command: |
                echo "This job will run the pull request bot, in its docker image "
                echo "The pull request bot workflow is the only one which is not"
-               echo "The pull request bot will trigger either of [cccc] or [cccc], using the [gio_action] pipeline parameter, depending on"
+               echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
                echo "the name of the source branch of the Pull Request. So bot will have to detect git branch ...(a condition)"
 
   product_release_job1:
