@@ -25,6 +25,7 @@ export GIT_BRANCH="issue-test-dev_pr_review-cci-workflow"
 
 export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" }, \"branch\": \"${GIT_BRANCH}\" }"
 export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" }, \"branch\": \"${GIT_BRANCH}\" }"
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"78.25.46\" }, \"branch\": \"${GIT_BRANCH}\" }"
 
 curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H 'Content-Type: application/json' -H "Circle-Token: ${CCI_API_TOKEN}" | jq .
 

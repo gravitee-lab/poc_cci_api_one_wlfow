@@ -12,7 +12,9 @@ parameters:
   pull_req_bot_image_tag:
     type: string
     default: '3.0.76'
-
+  is_triggered_from_pr:
+    type: boolean
+    default: true
 orbs:
   secrethub: secrethub/cli@1.0.0
 jobs:
@@ -38,6 +40,7 @@ jobs:
       DESIRED_DOCKER_TAG: 5.27.1
       PIPELINE_PARAM_GIO_ACTION: << pipeline.parameters.gio_action >>
       PIPELINE_PARAM_PR_BOT_IMAGE_TAG: << pipeline.parameters.pull_req_bot_image_tag >>
+      PIPELINE_PARAM_IS_TRIGGERED_FROM_PR: << pipeline.parameters.is_triggered_from_pr >>
     steps:
       - checkout
       - secrethub/install
@@ -45,13 +48,18 @@ jobs:
           name: "Running Pull Request Bot"
           command: |
                    echo "This job will run the pull request bot, in its docker image "
-                   echo "The pull request bot workflow is the only one which does not require any pipeline parameter."
-                   echo "The Pull Request Bot will be triggered with any new commit, and will ignore all commits events"
-                   echo "The Pull Request Bot will be able to detect if the event triggering the pipeline was a commit or a pull request, by inspecting the Circle CI [CIRCLE_PULL_REQUEST] native env. var. "
+                   echo "The pull request bot workflow is the only one which does not run conditionnaly to pipeline parameters value."
+                   echo "The Pull Request Bot will never the less use the 3 Pipeline parameters values, to be determine if the pipeline was triggered from a pull request or not."
+                   echo "The Pull Request Bot could be able to detect if the event triggering the pipeline was a commit or a pull request, by inspecting the Circle CI [CIRCLE_PULL_REQUEST] native env. var. : but we do not choose that, for us not to depend oon Github API future evolutions"
+                   echo "if PIPELINE_PARAM_IS_TRIGGERED_FROM_PR is set to false, then the bot knows trigger was not from a pull request. Any new commit on the source branch of the pull request, will trigger the workflow for the pull request review"
                    echo " ---"
                    echo "Here is the value of the Circle CI [CIRCLE_PULL_REQUEST] native env. var. : "
                    echo " ---"
                    echo "[${CIRCLE_PULL_REQUEST}] "
+                   echo " ---"
+                   echo "Here is the value of the Circle CI [CIRCLE_PULL_REQUESTS] native env. var. : "
+                   echo " ---"
+                   echo "[${CIRCLE_PULL_REQUESTS}] "
                    echo " ---"
                    echo "Here is the checked out git branch, and the last commit that branch : "
                    echo " ---"
@@ -69,11 +77,13 @@ jobs:
                    echo "        the triggering event was this last pull request, or a git commit, comparing the last"
                    echo "        commit on current bracnh in the pipeline, and the git commit ID of the pull request"
                    echo " ---"
-                   echo "Here is the value of the Circle CI Pipeline Parameters [CIRCLE_PARAMETERS] native env. var. : "
+                   echo "Here is the value of the Circle CI Pipeline Parameters : "
                    echo " ---"
                    echo "PIPELINE_PARAM_GIO_ACTION=[${PIPELINE_PARAM_GIO_ACTION}] "
                    echo "PIPELINE_PARAM_PR_BOT_IMAGE_TAG=[${PIPELINE_PARAM_PR_BOT_IMAGE_TAG}] "
+                   echo "PIPELINE_PARAM_IS_TRIGGERED_FROM_PR=[${PIPELINE_PARAM_IS_TRIGGERED_FROM_PR}]"
                    echo " ---"
+                   echo " When the [PIPELINE_PARAM_GIO_ACTION] value will be set to default, then the bot will know "
                    echo " ---"
                    echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
                    echo "the name of the source branch of the Pull Request. So bot will have to detect git branch ...(a condition)"
