@@ -2,7 +2,7 @@
 version: 2.1
 
 parameters:
-  action:
+  gio_action:
     type: enum
     enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
     default: dev_pr_review
@@ -85,7 +85,7 @@ workflows:
   version: 2.1
   product_release:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
       - product_release_job1:
           context: gravitee-lab
@@ -111,25 +111,25 @@ workflows:
 
   LTS_release:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
       - LTS_release_job1:
           context: gravitee-lab
   STS_release:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
       - STS_release_job1:
           context: gravitee-lab
   support_pr_review:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
       - support_pr_job1:
           context: gravitee-lab
   dev_pr_review:
     when:
-      equal: [ build, << pipeline.parameters.action >> ]
+      equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
       - dev_pr_job1:
           context: gravitee-lab
