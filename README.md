@@ -4,7 +4,10 @@ A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Ci
 
 ### The pull Requests Bot
 
-* The Circle CI Pipeline where the pull request bot operates, must be configured to "Only build pull requests"
+* The Circle CI Pipeline where the pull request bot operates, must be configured to _"Only build pull requests"_ :
+
+![Only build pull requests](./docs/images/ONLY_BUILD_PULL_REQUESTS.png)
+
 * The pull request bot will be triggered :
   * by any new pull request, on the source bracnh of the pull request
   * by any git pushed commit, on the source branch of any already existing pull request
@@ -46,7 +49,9 @@ Note that if the suppor team changes its git workflow, to ccreate support branch
 
 
 
-### Tested : A pipeline, configured to run _"Only on Pull Request"_
+### Test it !
+
+
 
 * Verified : Build Pull Request Only does trigger pipeline, from a git push, if a pull request is still open (so you cannot git push any commit after a pull request that is stil opened) :
 * now let's trigger a pipeline :
