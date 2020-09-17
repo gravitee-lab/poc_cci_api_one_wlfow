@@ -16,7 +16,10 @@ export GIO_CICD_ACTION="dev_pr_review"
 export GIO_CICD_ACTION="support_pr_review"
 
 export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" } }"
-curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H "Circle-Token: ${CCI_API_KEY}" | jq .
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" } }"
+
+curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H 'Content-Type: application/json' -H "Circle-Token: ${CCI_API_TOKEN}" | jq .
+
 
 ```
 
