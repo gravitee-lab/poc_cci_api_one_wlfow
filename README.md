@@ -2,6 +2,28 @@
 
 A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Circle CI pipeline definition .circleci/config.yml including at least two workflows, one can run only one Pipeline's Workflow, using the Circle CI API v2.
 
+### The pull Requests Bot
+
+* The pull request bot will be triggered :
+  * by any new pull request, on the source bracnh of the pull request
+  * by any git pushed commit, on the source branch of any already existing pull request
+* The pull request bot will not be triggered if the pipeline execution is triggered using the Circle Ci API v2, and providing the pipeline parameter `gio_action` has any of the enumeration values but the `pull_requests_bot` value.
+* So the pull requests bot will then inspect the native Circle CI Env. Variables relative to pull requests, and :
+  * if `gio_action` value is etiher of `product_release`, `lts_support_release`, or `sts_support_release`, then the pull requests bot is not triggered and only those
+  * if `gio_action` value is `pull_requests_bot`, then :
+    * the bot knows the trigger came either from the creation of a pull request, or a new commit on the source branch of an existing pull request.
+    * the bot will then inspect the checked out git branch, and :
+      * if the checked out git branch name `CIRCLE_BRANCH` starts with `support-`, then the bot will trigger again the pipeline, but this time with `gio_action` equals  `support_pr_review`, and on the source branch of the pull requests, which is exactly `CIRCLE_BRANCH`, like this :
+
+```bash
+
+```
+
+      * if the checked out git branch name `CIRCLE_BRANCH` starts with `support-`, then the bot will trigger again the pipeline, but this time with `gio_action` equals  `dev_pr_review`, and on the source branch of the pull requests, which is exactly `CIRCLE_BRANCH`
+
+
+enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review, pull_requests_bot]
+
 ### Tested : A pipeline, configured to run _"Only on Pull Request"_
 
 * Verified : Build Pull Request Only does trigger pipeline, from a git push, if a pull request is still open (so you cannot git push any commit after a pull request that is stil opened) :
