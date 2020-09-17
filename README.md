@@ -49,7 +49,7 @@ Note that if the suppor team changes its git workflow, to ccreate support branch
 
 
 
-## Test it !
+## Test the Pull Request Bot !
 
 ### "Only build pull requests" : CICD User Story
 
@@ -65,8 +65,12 @@ The initial state :
 
 
 The steps of this Use Case :
+* Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
+* git push a new commit
+* Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
 
-
+* Create a pull request from the `support-one-testcase1`, `issue-one-testcase1`, and `issue-two-testcase1` git branches, to the `3.0.1` git branch
+* Create a pull request from the `support-two-testcase1`, `issue-three-testcase1`, and `issue-four-testcase1` git branches, to the `3.8.1` git branch
 
 
 
