@@ -7,6 +7,8 @@ parameters:
     enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
     # default: dev_pr_review
     # default: none
+    # the [default:] clause is required : without it, there would be an error
+    default: none
   pull_req_bot_image_tag:
     type: string
     default: '3.0.76'
