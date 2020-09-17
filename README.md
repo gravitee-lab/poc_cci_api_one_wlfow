@@ -16,11 +16,24 @@ A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Ci
       * if the checked out git branch name `CIRCLE_BRANCH` starts with `support-`, then the bot will trigger again the pipeline, but this time with `gio_action` equals  `support_pr_review`, and on the source branch of the pull requests, which is exactly `CIRCLE_BRANCH`, like this :
 
 ```bash
+export CCI_API_TOKEN='<The PR Bot Circle CI Token>'
+export GIO_CICD_ACTION="support_pr_review"
+export GIT_BRANCH="${CIRCLE_BRANCH}"
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" }, \"branch\": \"${GIT_BRANCH}\" }"
+curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H 'Content-Type: application/json' -H "Circle-Token: ${CCI_API_TOKEN}" | jq .
 
 ```
 
       * if the checked out git branch name `CIRCLE_BRANCH` starts with `support-`, then the bot will trigger again the pipeline, but this time with `gio_action` equals  `dev_pr_review`, and on the source branch of the pull requests, which is exactly `CIRCLE_BRANCH`
 
+```bash
+export CCI_API_TOKEN='<The PR Bot Circle CI Token>'
+export GIO_CICD_ACTION="dev_pr_review"
+export GIT_BRANCH="${CIRCLE_BRANCH}"
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" }, \"branch\": \"${GIT_BRANCH}\" }"
+curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H 'Content-Type: application/json' -H "Circle-Token: ${CCI_API_TOKEN}" | jq .
+
+```
 
 enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review, pull_requests_bot]
 

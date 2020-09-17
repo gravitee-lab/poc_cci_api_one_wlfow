@@ -4,14 +4,16 @@ version: 2.1
 parameters:
   gio_action:
     type: enum
-    enum: [product_release, support_release, dev_pr_review, support_pr_review, pull_requests_bot, empty_workflow]
+    enum: [product_release, support_release, dev_pr_review, support_pr_review, pull_requests_bot]
     # the [default:] clause is required : without it, a Circle CI error will occur
     # default: none
     # the [default:] clause must have a valid value : without a valid value, a Circle CI error will occur
     default: pull_requests_bot
   pull_req_bot_image_tag:
     type: string
-    default: '3.0.76'
+    default: 'stable-latest' # stable -latest is not understood by docker, as "latest" of all tags. So we will use this docker tag to automatically updae / upgrade the Pull Request Bot
+    # default: '3.0.76' # we dpo not use explicit version number for docker tag, for us not to be doomed to update a lot of [.circleci/config.yml]
+    # default : 'latest' # we never ever use 'latest', but stable-latest
   is_triggered_from_pr:
     type: boolean
     default: true
