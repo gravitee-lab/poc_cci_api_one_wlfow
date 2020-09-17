@@ -30,6 +30,10 @@ git checkout -b issue-two-testcase1
 echo "pushing a commit on branch [issue-two-testcase1]" >> README.issue-two-testcase1.md
 git add --all && git commit -m "${COMMIT_MESSAGE}" && git push -u origin HEAD
 
+git checkout 3.0.x
+echo "[3.0.x] branch is ready : pushing another commit on branch [3.0.x] to make a beautiful git graph" >> README.3.0.x.md
+git add --all && git commit -m "${COMMIT_MESSAGE}" && git push -u origin HEAD
+
 # --- #
 
 git checkout 3.8.x
@@ -45,6 +49,10 @@ git add --all && git commit -m "${COMMIT_MESSAGE}" && git push -u origin HEAD
 git checkout 3.8.x
 git checkout -b issue-four-testcase1
 echo "pushing a commit on branch [issue-four-testcase1]" >> README.issue-four-testcase1.md
+git add --all && git commit -m "${COMMIT_MESSAGE}" && git push -u origin HEAD
+
+git checkout 3.8.x
+echo "[3.0.x] branch is ready : pushing another commit on branch [3.0.x] to make a beautiful git graph" >> README.3.0.x.md
 git add --all && git commit -m "${COMMIT_MESSAGE}" && git push -u origin HEAD
 
 
