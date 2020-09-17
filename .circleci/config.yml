@@ -5,7 +5,8 @@ parameters:
   gio_action:
     type: enum
     enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
-    default: dev_pr_review
+    # default: dev_pr_review
+    # default: none
   pull_req_bot_image_tag:
     type: string
     default: '3.0.76'
