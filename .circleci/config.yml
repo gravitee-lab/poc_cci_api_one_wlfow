@@ -10,7 +10,6 @@ parameters:
 orbs:
   secrethub: secrethub/cli@1.0.0
 jobs:
-
   product_release_job1:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
@@ -85,6 +84,8 @@ jobs:
 workflows:
   version: 2.1
   product_release:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - product_release_job1:
           context: gravitee-lab
@@ -109,18 +110,26 @@ workflows:
                 # - /^*dependabot*/
 
   LTS_release:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - LTS_release_job1:
           context: gravitee-lab
   STS_release:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - STS_release_job1:
           context: gravitee-lab
   support_pr_review:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - support_pr_job1:
           context: gravitee-lab
   dev_pr_review:
+    when:
+      equal: [ build, << pipeline.parameters.action >> ]
     jobs:
       - dev_pr_job1:
           context: gravitee-lab
