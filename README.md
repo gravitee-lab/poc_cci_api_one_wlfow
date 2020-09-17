@@ -4,6 +4,7 @@ A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Ci
 
 ### The pull Requests Bot
 
+* The Circle CI Pipeline where the pull request bot operates, must be configured to "Only build pull requests"
 * The pull request bot will be triggered :
   * by any new pull request, on the source bracnh of the pull request
   * by any git pushed commit, on the source branch of any already existing pull request
@@ -35,7 +36,15 @@ curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee
 
 ```
 
-enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review, pull_requests_bot]
+The Circle CI Pipeline where the bot operates, must be configured to "Only build pull requests"
+
+Note that if the suppor team changes its git workflow, to ccreate support branches named
+* with prefix `sts-`
+* with pefix `lts-`
+* instead of the prefix `support-`
+* then the bot could easily be modified to trigger different workflows, for LTS and STS support sprint Pull Requests.
+
+
 
 ### Tested : A pipeline, configured to run _"Only on Pull Request"_
 
