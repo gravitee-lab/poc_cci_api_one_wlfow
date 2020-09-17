@@ -6,6 +6,9 @@ parameters:
     type: enum
     enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
     default: dev_pr_review
+  pull_req_bot_image_tag:
+    type: string
+    default: '3.0.76'
 
 orbs:
   secrethub: secrethub/cli@1.0.0

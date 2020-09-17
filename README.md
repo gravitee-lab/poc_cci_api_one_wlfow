@@ -2,7 +2,23 @@
 
 A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Circle CI pipeline definition .circleci/config.yml including at least two workflows, one can run only one Pipeline's Workflow, using the Circle CI API v2.
 
+### Tested :
 
+* Verified : Build Pull Request Only does trigger pipeline, from a git push, if a pull request is still open (so you cannot git push any commit after a pull request that is stil opened) :
+* now let's trigger a pipeline :
+
+```bash
+export CCI_API_TOKEN='xxxxxxxxxxxxxxxxxxxxx'
+export GIO_CICD_ACTION="product_release"
+export GIO_CICD_ACTION="lts_support_release"
+export GIO_CICD_ACTION="sts_support_release"
+export GIO_CICD_ACTION="dev_pr_review"
+export GIO_CICD_ACTION="support_pr_review"
+
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" } }"
+curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H "Circle-Token: ${CCI_API_KEY}" | jq .
+
+```
 
 ### Triggering just one workflow of a given pipeline
 
