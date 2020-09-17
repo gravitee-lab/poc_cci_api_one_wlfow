@@ -6,6 +6,9 @@ parameters:
     type: enum
     enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
     default: dev_pr_review
+  pull_req_bot_image_tag:
+    type: string
+    default: '3.0.76'
 
 orbs:
   secrethub: secrethub/cli@1.0.0
@@ -23,10 +26,32 @@ jobs:
       - run:
           name: "Running Pull Request Bot"
           command: |
-               echo "This job will run the pull request bot, in its docker image "
-               echo "The pull request bot workflow is the only one which is not"
-               echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
-               echo "the name of the source branch of the Pull Request. So bot will have to detect git branch ...(a condition)"
+                   echo "This job will run the pull request bot, in its docker image "
+                   echo "The pull request bot workflow is the only one which does not require any pipeline parameter."
+                   echo "The Pull Request Bot will be triggered with any new commit, and will ignore all commits events"
+                   echo "The Pull Request Bot will be able to detect if the event triggering the pipeline was a commit or a pull request, by inspecting the Circle CI [CIRCLE_PULL_REQUEST] native env. var. "
+                   echo " ---"
+                   echo "Here is the value of the Circle CI [CIRCLE_PULL_REQUEST] native env. var. : "
+                   echo " ---"
+                   echo "[${CIRCLE_PULL_REQUEST}] "
+                   echo " ---"
+                   echo "Here is the checked out git branch, and the last commit that branch : "
+                   echo " ---"
+                   echo "CHECKED OUT GIT BRANCH IS : [${CIRCLE_BRANCH}] "
+                   echo "LAST COMMIT ON THIS BRANCH IS : [$(git rev-parse ${CIRCLE_BRANCH})] "
+                   echo " ---"
+                   echo "COMMIT HASH associated with the [${CIRCLE_PULL_REQUEST}] Pull Request IS : "
+                   echo ""
+                   echo " Use github API v4 (GraphQL ), see https://docs.github.com/en/graphql/reference/objects#pullrequest"
+                   echo ""
+                   echo " ---"
+                   echo " Note : the [CIRCLE_PULL_REQUEST] env. var. will, even for a commit event, display"
+                   echo "        the HTTP Link to the latest opened pull request. Now we the bot can detect if"
+                   echo "        the triggering event was this last pull request, or a git commit, comparing the last"
+                   echo "        commit on current bracnh in the pipeline, and the git commit ID of the pull request"
+                   echo " ---"
+                   echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
+                   echo "the name of the source branch of the Pull Request. So bot will have to detect git branch ...(a condition)"
 
   product_release_job1:
     machine:
@@ -107,7 +132,7 @@ workflows:
           context: gravitee-lab
   product_release:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ product_release, << pipeline.parameters.gio_action >> ]
     jobs:
       - product_release_job1:
           context: gravitee-lab
@@ -133,25 +158,25 @@ workflows:
 
   LTS_release:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ lts_support_release, << pipeline.parameters.gio_action >> ]
     jobs:
       - LTS_release_job1:
           context: gravitee-lab
   STS_release:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ sts_support_release, << pipeline.parameters.gio_action >> ]
     jobs:
       - STS_release_job1:
           context: gravitee-lab
   support_pr_review:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ support_pr_review, << pipeline.parameters.gio_action >> ]
     jobs:
       - support_pr_job1:
           context: gravitee-lab
   dev_pr_review:
     when:
-      equal: [ build, << pipeline.parameters.gio_action >> ]
+      equal: [ dev_pr_review, << pipeline.parameters.gio_action >> ]
     jobs:
       - dev_pr_job1:
           context: gravitee-lab
