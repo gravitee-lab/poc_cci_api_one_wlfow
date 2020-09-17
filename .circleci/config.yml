@@ -5,6 +5,9 @@ parameters:
   gio_action:
     type: enum
     enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
+    # the [default:] clause is required : without it, a Circle CI error will occur
+    # default: none
+    # the [default:] clause must have a valid value : without a valid value, a Circle CI error will occur
     default: dev_pr_review
   pull_req_bot_image_tag:
     type: string
