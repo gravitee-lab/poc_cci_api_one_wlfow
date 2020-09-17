@@ -9,19 +9,29 @@ A test to proove that using the Circle CI API v2 to trigger a Pipeline, and a Ci
 
 ```bash
 export CCI_API_TOKEN='xxxxxxxxxxxxxxxxxxxxx'
+export GIO_CICD_ACTION="empty_workflow"
 export GIO_CICD_ACTION="product_release"
 export GIO_CICD_ACTION="lts_support_release"
 export GIO_CICD_ACTION="sts_support_release"
 export GIO_CICD_ACTION="dev_pr_review"
 export GIO_CICD_ACTION="support_pr_review"
 
-export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" } }"
-export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" } }"
+
+export GIT_BRANCH="master"
+export GIT_BRANCH="develop"
+export GIT_BRANCH="3.0.x"
+export GIT_BRANCH="3.8.x"
+export GIT_BRANCH="issue-test-dev_pr_review-cci-workflow"
+
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\", \"pull_req_bot_image_tag\": \"4.8.2\" }, \"branch\": \"${GIT_BRANCH}\" }"
+export PIPE_PARAMS="{ \"parameters\": { \"gio_action\": \"${GIO_CICD_ACTION}\" }, \"branch\": \"${GIT_BRANCH}\" }"
 
 curl -d "${PIPE_PARAMS}" -X POST https://circleci.com/api/v2/project/gh/gravitee-lab/poc_cci_api_one_wlfow/pipeline -H 'Accept: application/json' -H 'Content-Type: application/json' -H "Circle-Token: ${CCI_API_TOKEN}" | jq .
 
 
 ```
+
+All Circle CI native Env. Variables available in Pipelines : https://circleci.com/docs/2.0/env-vars/#built-in-environment-variables
 
 ### Triggering just one workflow of a given pipeline
 
