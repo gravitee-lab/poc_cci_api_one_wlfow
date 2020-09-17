@@ -8,12 +8,22 @@ git checkout ${WORK_BRANCH}
 
 
 git branch -D support-one-testcase1
-git branch -D issue-one-testcase1
-git branch -D issue-two-testcase1
-git branch -D support-two-testcase1
-git branch -D issue-three-testcase1
-git branch -D issue-four-testcase1
+git push -u origin --delete support-one-testcase1
 
+git branch -D issue-one-testcase1
+git push -u origin --delete issue-one-testcase1
+
+git branch -D issue-two-testcase1
+git push -u origin --delete issue-two-testcase1
+
+git branch -D support-two-testcase1
+git push -u origin --delete support-two-testcase1
+
+git branch -D issue-three-testcase1
+git push -u origin --delete issue-three-testcase1
+
+git branch -D issue-four-testcase1
+git push -u origin --delete issue-four-testcase1
 
 git checkout 3.0.x
 git checkout -b support-one-testcase1
