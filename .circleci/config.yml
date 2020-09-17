@@ -52,7 +52,7 @@ jobs:
           name: "A FIRST TEST JOB for STS Support Release"
           command: |
                echo "A FIRST TEST JOB for STS Support Release"
-  dev_pr_review:
+  dev_pr_job1:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
       # resource_class: medium
@@ -66,7 +66,7 @@ jobs:
           name: "A FIRST TEST JOB for Dev Pull Request Review"
           command: |
                echo "A FIRST TEST JOB for Dev Pull Request Review"
-  support_pr_review:
+  support_pr_job1:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
       # resource_class: medium
