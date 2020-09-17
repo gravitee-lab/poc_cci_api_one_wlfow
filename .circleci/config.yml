@@ -36,6 +36,8 @@ jobs:
       # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
     environment:
       DESIRED_DOCKER_TAG: 5.27.1
+      PIPELINE_PARAM_GIO_ACTION: << pipeline.parameters.gio_action >>
+      PIPELINE_PARAM_PR_BOT_IMAGE_TAG: << pipeline.parameters.pull_req_bot_image_tag >>
     steps:
       - checkout
       - secrethub/install
@@ -69,7 +71,8 @@ jobs:
                    echo " ---"
                    echo "Here is the value of the Circle CI Pipeline Parameters [CIRCLE_PARAMETERS] native env. var. : "
                    echo " ---"
-                   echo "[${CIRCLE_PULL_REQUEST}] "
+                   echo "PIPELINE_PARAM_GIO_ACTION=[${PIPELINE_PARAM_GIO_ACTION}] "
+                   echo "PIPELINE_PARAM_PR_BOT_IMAGE_TAG=[${PIPELINE_PARAM_PR_BOT_IMAGE_TAG}] "
                    echo " ---"
                    echo " ---"
                    echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
