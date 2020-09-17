@@ -1,51 +1,158 @@
 # Machine executor, set the machine key to true in .circleci/config.yml:
 version: 2.1
+
+parameters:
+  gio_action:
+    type: enum
+    enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review]
+    default: dev_pr_review
+
 orbs:
   secrethub: secrethub/cli@1.0.0
 jobs:
-  a_first_test_job:
+  pull_requests_bot_exec:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
       # resource_class: medium
       # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
     environment:
       DESIRED_DOCKER_TAG: 5.27.1
-      DOCKER_LOGIN_USERNAME: 'ccc'
-      DOCKER_LOGIN_SECRET: 'ccc'
     steps:
       - checkout
       - secrethub/install
       - run:
-          name: "A FIRST TEST JOB"
+          name: "Running Pull Request Bot"
           command: |
-               echo "A FIRST TEST JOB"
-  yet_another_test_job:
+               echo "This job will run the pull request bot, in its docker image "
+               echo "The pull request bot workflow is the only one which is not"
+               echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
+               echo "the name of the source branch of the Pull Request. So bot will have to detect git branch ...(a condition)"
+
+  product_release_job1:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
       # resource_class: medium
       # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
     environment:
       DESIRED_DOCKER_TAG: 5.27.1
-      DOCKER_LOGIN_USERNAME: 'ccc'
-      DOCKER_LOGIN_SECRET: 'ccc'
     steps:
       - checkout
       - secrethub/install
       - run:
-          name: "YET ANOTHER TEST WORKFLOW"
+          name: "YET ANOTHER TEST WORKFLOW for Product Release"
           command: |
-               echo "YET ANOTHER TEST WORKFLOW"
+               echo "YET ANOTHER TEST WORKFLOW for Product Release"
+  LTS_release_job1:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_DOCKER_TAG: 5.27.1
+    steps:
+      - checkout
+      - secrethub/install
+      - run:
+          name: "A FIRST TEST JOB for LTS Support Release"
+          command: |
+               echo "A FIRST TEST JOB for LTS Support Release"
+  STS_release_job1:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_DOCKER_TAG: 5.27.1
+    steps:
+      - checkout
+      - secrethub/install
+      - run:
+          name: "A FIRST TEST JOB for STS Support Release"
+          command: |
+               echo "A FIRST TEST JOB for STS Support Release"
+  dev_pr_job1:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_DOCKER_TAG: 5.27.1
+    steps:
+      - checkout
+      - secrethub/install
+      - run:
+          name: "A FIRST TEST JOB for Dev Pull Request Review"
+          command: |
+               echo "A FIRST TEST JOB for Dev Pull Request Review"
+  support_pr_job1:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_DOCKER_TAG: 5.27.1
+    steps:
+      - checkout
+      - secrethub/install
+      - run:
+          name: "A FIRST TEST JOB for Support Pull Request Review"
+          command: |
+               echo "A FIRST TEST JOB for Support Pull Request Review"
 
 workflows:
   version: 2.1
-  yet_another_test_workflow:
+  pull_requests_bot:
     jobs:
-      - yet_another_test_job:
+      - pull_requests_bot_exec:
           context: gravitee-lab
-  a_first_workflow:
+  product_release:
+    when:
+      equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
-      - yet_another_test_job:
+      - product_release_job1:
           context: gravitee-lab
-      - a_first_test_job:
+          # filters:
+            # will run only when on master branch, with a release tag
+            # branches:
+              # will not run on pull requests from
+              # dev or support team
+              # only:
+                # - master
+                # - 1.20.x
+                # - 1.25.x
+                # - 1.30.x
+                # - 3.0.x
+                # - 3.1.x
+                # - /^*.x/
+              # ignore:
+                # - /^fix*/
+                # - /^issues*/
+                # - /^*support/
+                # - /^*snyk*/
+                # - /^*dependabot*/
+
+  LTS_release:
+    when:
+      equal: [ build, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - LTS_release_job1:
           context: gravitee-lab
-          requires:
+  STS_release:
+    when:
+      equal: [ build, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - STS_release_job1:
+          context: gravitee-lab
+  support_pr_review:
+    when:
+      equal: [ build, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - support_pr_job1:
+          context: gravitee-lab
+  dev_pr_review:
+    when:
+      equal: [ build, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - dev_pr_job1:
+          context: gravitee-lab
+          # filters:
