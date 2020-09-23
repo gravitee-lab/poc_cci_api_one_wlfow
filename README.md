@@ -80,14 +80,16 @@ The steps of this Use Case :
 ```bash
 export CCI_API_TOKEN='xxxxxxxxxxxxxxxxxxxxx'
 
-# choose the workflow
+# Choose the workflow
 export GIO_CICD_ACTION="product_release"
+export GIO_CICD_ACTION="product_release_dry_run"
 export GIO_CICD_ACTION="lts_support_release"
 export GIO_CICD_ACTION="sts_support_release"
 export GIO_CICD_ACTION="dev_pr_review"
 export GIO_CICD_ACTION="support_pr_review"
+export GIO_CICD_ACTION="build"
 
-# choose the branch
+# Choose the branch
 export GIT_BRANCH="master"
 export GIT_BRANCH="develop"
 export GIT_BRANCH="support-one-testcase1"

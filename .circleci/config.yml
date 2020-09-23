@@ -4,7 +4,7 @@ version: 2.1
 parameters:
   gio_action:
     type: enum
-    enum: [product_release, lts_support_release, sts_support_release, dev_pr_review, support_pr_review, pull_requests_bot]
+    enum: [product_release, product_release_dry_run, lts_support_release, sts_support_release, dev_pr_review, support_pr_review, build, pull_requests_bot]
     # the [default:] clause is required : without it, a Circle CI error will occur
     # default: none
     # the [default:] clause must have a valid value : without a valid value, a Circle CI error will occur
@@ -27,7 +27,7 @@ jobs:
       # resource_class: medium
       # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
     environment:
-      DESIRED_DOCKER_TAG: 5.27.1
+      DESIRED_DOCKER_TAG: stable-latest
       PIPELINE_PARAM_GIO_ACTION: << pipeline.parameters.gio_action >>
       PIPELINE_PARAM_PR_BOT_IMAGE_TAG: << pipeline.parameters.pull_req_bot_image_tag >>
       PIPELINE_PARAM_IS_TRIGGERED_FROM_PR: << pipeline.parameters.is_triggered_from_pr >>
@@ -37,46 +37,62 @@ jobs:
       - run:
           name: "Running Pull Request Bot"
           command: |
-                   echo "This job will run the pull request bot, in its docker image "
-                   echo "The pull Request bot workflow is the only one which does not run conditionnaly to pipeline parameters value."
-                   echo "The Pull Request Bot will never the less use the 3 Pipeline parameters values, to be determine if the pipeline was triggered from a pull request or not."
-                   echo "The Pull Request Bot could be able to detect if the event triggering the pipeline was a commit or a pull request, by inspecting the Circle CI [CIRCLE_PULL_REQUEST] native env. var. : but we do not choose that, for us not to depend oon Github API future evolutions"
-                   echo "if PIPELINE_PARAM_IS_TRIGGERED_FROM_PR is set to false, then the bot knows trigger was not from a pull request. Any new commit on the source branch of the pull request, will trigger the workflow for the pull request review"
-                   echo " ---"
-                   echo "Here is the value of the Circle CI pull requests related native env. var. : "
-                   echo " ---"
-                   echo "CIRCLE_PULL_REQUEST=[${CIRCLE_PULL_REQUEST}] "
-                   echo "CIRCLE_PULL_REQUESTS=[${CIRCLE_PULL_REQUESTS}] "
-                   echo "CIRCLE_PR_NUMBER=[${CIRCLE_PR_NUMBER}] "
-                   echo "CIRCLE_PR_REPONAME=[${CIRCLE_PR_REPONAME}] "
-                   echo "CIRCLE_PR_USERNAME=[${CIRCLE_PR_USERNAME}] "
-                   echo " ---"
-                   echo "Here is the checked out git branch, and the last commit that branch : "
-                   echo " ---"
-                   echo "CHECKED OUT GIT BRANCH IS : [${CIRCLE_BRANCH}] "
-                   echo "LAST COMMIT ON THIS BRANCH IS : [$(git rev-parse ${CIRCLE_BRANCH})] "
-                   echo "Circle CI [CIRCLE_SHA1] value is [${CIRCLE_SHA1}]"
-                   echo " ---"
-                   echo "COMMIT HASH associated with the [${CIRCLE_PULL_REQUEST}] Pull Request IS : "
-                   echo ""
-                   echo " Use github API v4 (GraphQL ), see https://docs.github.com/en/graphql/reference/objects#pullrequest"
-                   echo ""
-                   echo " ---"
-                   echo " Note : the [CIRCLE_PULL_REQUEST] env. var. will, even for a commit event, display"
-                   echo "        the HTTP Link to the latest opened pull request. Now we the bot can detect if"
-                   echo "        the triggering event was this last pull request, or a git commit, comparing the last"
-                   echo "        commit on current bracnh in the pipeline, and the git commit ID of the pull request"
-                   echo " ---"
-                   echo "Here is the value of the Circle CI Pipeline Parameters : "
-                   echo " ---"
-                   echo "PIPELINE_PARAM_GIO_ACTION=[${PIPELINE_PARAM_GIO_ACTION}] "
-                   echo "PIPELINE_PARAM_PR_BOT_IMAGE_TAG=[${PIPELINE_PARAM_PR_BOT_IMAGE_TAG}] "
-                   echo "PIPELINE_PARAM_IS_TRIGGERED_FROM_PR=[${PIPELINE_PARAM_IS_TRIGGERED_FROM_PR}]"
-                   echo " ---"
-                   echo " When the [PIPELINE_PARAM_GIO_ACTION] value will be set to default, then the bot will know "
-                   echo " ---"
-                   echo "The pull request bot will trigger either of [dev_pr_job1] or [support_pr_job1], using the [gio_action] pipeline parameter, depending on"
-                   echo "the name of the source branch of the Pull Request. So bot will have to detect git branch ...(a condition)"
+                    echo "This job will run the pull request bot, in its docker image "
+                    echo " ---"
+                    echo "Here are the values of the Circle CI Pipeline Parameters : "
+                    echo " ---"
+                    echo "PIPELINE_PARAM_GIO_ACTION=[${PIPELINE_PARAM_GIO_ACTION}] "
+                    echo "PIPELINE_PARAM_PR_BOT_IMAGE_TAG=[${PIPELINE_PARAM_PR_BOT_IMAGE_TAG}] "
+                    echo "PIPELINE_PARAM_IS_TRIGGERED_FROM_PR=[${PIPELINE_PARAM_IS_TRIGGERED_FROM_PR}]"
+                    echo " ---"
+                    echo "Here are the values of the Circle CI pull requests related native env. var. : "
+                    echo " ---"
+                    echo "CIRCLE_PULL_REQUEST=[${CIRCLE_PULL_REQUEST}] "
+                    echo "CIRCLE_PULL_REQUESTS=[${CIRCLE_PULL_REQUESTS}] "
+                    echo "CIRCLE_PR_NUMBER=[${CIRCLE_PR_NUMBER}] "
+                    echo "CIRCLE_PR_REPONAME=[${CIRCLE_PR_REPONAME}] "
+                    echo "CIRCLE_PR_USERNAME=[${CIRCLE_PR_USERNAME}] "
+                    echo " ---"
+                    echo "Here are the values infered from Circle CI env. var., releated to the checked out git branch, and the last commit that branch : "
+                    echo " ---"
+                    echo "CHECKED OUT GIT BRANCH IS : [${CIRCLE_BRANCH}] "
+                    echo "LAST COMMIT ON THIS BRANCH IS : [$(git rev-parse ${CIRCLE_BRANCH})] "
+                    echo "Circle CI [CIRCLE_SHA1] value is [${CIRCLE_SHA1}]"
+                    echo " ---"
+                    docker pull quay.io/gravitee-lab/cicd-orchestrator:stable-latest
+                    # checking docker image pulled in previous step is there
+                    docker images
+                    # --> .secrets.json is used by Gravitee CI CD Orchestrator to authenticate to Circle CI
+                    CCI_SECRET_FILE=$PWD/.secrets.json
+                    secrethub read --out-file ${CCI_SECRET_FILE} gravitee-lab/cicd-orchestrator/dev/cci/botuser/.secret.json
+                    ls -allh ${CCI_SECRET_FILE}
+                    # Docker volumes to map pipeline checked out git tree, .env file and .secrets.json files inside the docker container
+                    # export DOCKER_VOLUMES="-v $PWD:/graviteeio/cicd/pipeline -v $PWD/.env:/graviteeio/cicd/.env -v $PWD/.secrets.json:/graviteeio/cicd/.secrets.json"
+                    export DOCKER_VOLUMES="-v $PWD:/graviteeio/cicd/pipeline -v $PWD/.secrets.json:/graviteeio/cicd/.secrets.json"
+                    docker run --name orchestrator ${DOCKER_VOLUMES} --restart no -itd quay.io/gravitee-lab/cicd-orchestrator:stable-latest -- --pr-bot true --pr-bot-mode support
+                    docker logs -f orchestrator
+
+  mvn_build:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_MAVEN_VERSION: 3.6.3
+    steps:
+      - checkout
+      - secrethub/install
+      - run:
+          name: "Simple Maven Build for the component"
+          command: |
+                    echo "This job will execute the maven build for the Gravitee IO Component"
+                    echo "This job will be triggered for any PR on the github git repo of the Gravitee Component."
+                    echo "Never the less, there might be just any"
+                    echo "Run Maven Package"
+                    export MVN_DOCKER="maven:${DESIRED_MAVEN_VERSION}-openjdk-16 "
+                    export MAVEN_COMMAND="mvn clean package"
+                    echo "Run Maven Tests MAVEN_COMMAND=[${MAVEN_COMMAND}]"
+                    docker run -it --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -w /usr/src/mymaven ${MVN_DOCKER} ${MAVEN_COMMAND}
 
   product_release_job1:
     machine:
@@ -89,9 +105,25 @@ jobs:
       - checkout
       - secrethub/install
       - run:
-          name: "YET ANOTHER TEST WORKFLOW for Product Release"
+          name: "First WORKFLOW for Product Release"
           command: |
-               echo "YET ANOTHER TEST WORKFLOW for Product Release"
+               echo "First WORKFLOW for Product Release"
+  product_release_dry_job1:
+    machine:
+      image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
+      # resource_class: medium
+      # docker_layer_caching: true    # default - false # requires a Circle CI plan that includes [Docker layer caching feature]
+    environment:
+      DESIRED_DOCKER_TAG: 5.27.1
+    steps:
+      - checkout
+      - secrethub/install
+      - run:
+          name: "[DRY RUN] First WORKFLOW for Product Release Dry Run"
+          command: |
+                    echo "[DRY RUN] First WORKFLOW for Product Release Dry Run"
+                    echo "Here what will be done is just echoing all Product Release Shell commands, to check their paramters /optionsvalues, the git branch etc..."
+
 
   dev_pr_job1:
     machine:
@@ -143,6 +175,12 @@ workflows:
       equal: [ pull_requests_bot, << pipeline.parameters.gio_action >> ]
     jobs:
       - pull_requests_bot_exec:
+          context: cicd-orchestrator
+  product_release_dry_run:
+    when:
+      equal: [ product_release_dry_run, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - product_release_dry_job1:
           context: gravitee-lab
   product_release:
     when:
@@ -150,26 +188,6 @@ workflows:
     jobs:
       - product_release_job1:
           context: gravitee-lab
-          # filters:
-            # will run only when on master branch, with a release tag
-            # branches:
-              # will not run on pull requests from
-              # dev or support team
-              # only:
-                # - master
-                # - 1.20.x
-                # - 1.25.x
-                # - 1.30.x
-                # - 3.0.x
-                # - 3.1.x
-                # - /^*.x/
-              # ignore:
-                # - /^fix*/
-                # - /^issues*/
-                # - /^*support/
-                # - /^*snyk*/
-                # - /^*dependabot*/
-
   lts_support_release:
     when:
       equal: [ lts_support_release, << pipeline.parameters.gio_action >> ]
@@ -196,3 +214,9 @@ workflows:
       - dev_pr_job1:
           context: gravitee-lab
           # filters:
+ build:
+    when:
+      equal: [ build, << pipeline.parameters.gio_action >> ]
+    jobs:
+      - mvn_build:
+          context: cicd-orchestrator
