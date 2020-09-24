@@ -1,5 +1,5 @@
 # Machine executor, set the machine key to true in .circleci/config.yml:
-version: '2.1'
+version: 2.1
 parameters:
   gio_action:
     type: enum
@@ -211,8 +211,7 @@ workflows:
     jobs:
       - dev_pr_job1:
           context: gravitee-lab
-          # filters:
- build:
+  build:
     when:
       equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
