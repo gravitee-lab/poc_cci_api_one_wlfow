@@ -33,11 +33,6 @@ jobs:
       - checkout
       - secrethub/install
       - run:
-          name: "Git installation check"
-          command: |
-                    echo "Is git installed ?"
-                    sh -c "git --version"
-      - run:
           name: "Running Pull Request Bot"
           command: |
                     echo "This job will run the pull request bot, in its docker image "
