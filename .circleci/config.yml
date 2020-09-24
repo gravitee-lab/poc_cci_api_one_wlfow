@@ -1,6 +1,5 @@
 # Machine executor, set the machine key to true in .circleci/config.yml:
 version: 2.1
-
 parameters:
   gio_action:
     type: enum
