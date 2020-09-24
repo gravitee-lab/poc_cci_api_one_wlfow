@@ -70,7 +70,7 @@ jobs:
                     docker run --name orchestrator ${DOCKER_VOLUMES} --restart no -itd quay.io/gravitee-lab/cicd-orchestrator:stable-latest -s pull_req --dry-run false
                     docker logs -f orchestrator
 
-  mvn_build:
+  mvn_verify:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
       # resource_class: medium
@@ -88,7 +88,7 @@ jobs:
                     echo "Never the less, there might be just any"
                     echo "Run Maven Package"
                     export MVN_DOCKER="maven:${DESIRED_MAVEN_VERSION}-openjdk-16 "
-                    export MAVEN_COMMAND="mvn clean package"
+                    export MAVEN_COMMAND="mvn clean verify"
                     echo "Run Maven Tests MAVEN_COMMAND=[${MAVEN_COMMAND}]"
                     docker run -it --rm -v "$PWD":/usr/src/mymaven -v "$HOME/.m2":/root/.m2 -w /usr/src/mymaven ${MVN_DOCKER} ${MAVEN_COMMAND}
 
@@ -215,5 +215,5 @@ workflows:
     when:
       equal: [ build, << pipeline.parameters.gio_action >> ]
     jobs:
-      - mvn_build:
+      - mvn_verify:
           context: cicd-orchestrator
