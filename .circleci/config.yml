@@ -20,7 +20,6 @@ parameters:
 orbs:
   secrethub: secrethub/cli@1.0.0
 jobs:
-
   pull_requests_bot_exec:
     machine:
       image: 'ubuntu-1604:201903-01'    # recommended linux image - includes Ubuntu 16.04, docker 18.09.3, docker-compose 1.23.1
